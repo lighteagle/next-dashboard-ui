@@ -20,7 +20,7 @@ const BigCalendar = () => {
       endAccessor="end"
       views={["work_week","day"]}
       view={view}
-      style={{ height: 500 }}
+      style={{ height: "98%" }}
       onView={handleViewChange}
       min={new Date(2025, 2, 24, 8, 0)}
       max={new Date(2025, 2, 24, 17, 0)}
