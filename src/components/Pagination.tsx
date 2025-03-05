@@ -23,8 +23,8 @@ const Pagination = ({ page, count }: { page: number; count: number }) => {
         Prev
       </button>
       <div className="flex items-center gap-2 text-sm">
-        {Array.from({ length: Math.ceil(count / ITEM_PER_PAGE) }, (_, i) => {
-          const pageIndex = i + 1;
+        {Array.from({ length: Math.ceil(count / ITEM_PER_PAGE) }, (_, index) => {
+          const pageIndex = index + 1;
           return (
             <button
               key={pageIndex}
