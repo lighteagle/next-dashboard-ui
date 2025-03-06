@@ -115,7 +115,11 @@ const TeacherListPage = async ({
             },
           };
           break;
-
+        case "search":
+          query.name = {
+            contains: value,mode: "insensitive",
+          };
+          break;
         default:
           break;
       }
