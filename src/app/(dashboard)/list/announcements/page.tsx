@@ -4,7 +4,7 @@ import Table from "@/components/Table";
 import TableSearch from "@/components/TableSearch";
 import prisma from "@/lib/prisma";
 import { ITEM_PER_PAGE } from "@/lib/settings";
-import { getUserRole } from "@/lib/utils";
+import { getUserDetail } from "@/lib/utils";
 import { Announcement, Class, Prisma } from "@prisma/client";
 import Image from "next/image";
 
@@ -15,7 +15,7 @@ const AnnouncementListPage = async ({
 }: {
   searchParams: { [key: string]: string | undefined };
 }) => {
-  const role = await getUserRole();
+  const {role, currentUserId} = await getUserDetail();
 
   const renderRow = (item: AnnouncementList) => (
     <tr
@@ -23,7 +23,7 @@ const AnnouncementListPage = async ({
       className="border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-lamaPurpleLight"
     >
       <td className="flex items-center gap-4 p-4">{item.title}</td>
-      <td>{item.class.name}</td>
+      <td>{item.class?.name || "-"}</td>
       <td className="hidden md:table-cell">
         {new Intl.DateTimeFormat("en-US").format(item.date)}
       </td>
@@ -87,6 +87,18 @@ const AnnouncementListPage = async ({
       }
     }
   }
+
+    // ROLE CONDITIONS
+    const roleConditions: Record<string, object> = {
+      teacher: { lessons: { some: { teacherId: currentUserId } } },
+      student: { students: { some: { id: currentUserId } } },
+      parent: { students: { some: { parentId: currentUserId } } }, 
+    };
+  
+    query.OR = [
+      { classId: null },
+      { class: role && roleConditions[role] ? roleConditions[role] : {} },
+    ];
 
   const [data, count] = await prisma.$transaction([
     prisma.announcement.findMany({

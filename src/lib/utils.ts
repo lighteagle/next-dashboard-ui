@@ -1,6 +1,12 @@
 import { auth } from "@clerk/nextjs/server";
 
-export const getUserRole = async () => {
-  const { sessionClaims } = await auth(); // ✅ Gunakan `await`
-  return (sessionClaims?.metadata as { role?: string })?.role;
+export const getUserDetail = async () => {
+  const { userId, sessionClaims } = await auth();
+
+  const userDetail = {
+    role: (sessionClaims?.metadata as { role?: string })?.role || null,
+    currentUserId: userId || null,
+  };
+
+  return userDetail;
 };
