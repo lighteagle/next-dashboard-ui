@@ -10,6 +10,7 @@ const CountChartContainer = async () => {
   });
   const boys = data.find((item) => item.sex === "MALE")?._count || 0;
   const girls = data.find((item) => item.sex === "FEMALE")?._count || 0;
+
   return (
     <div className="bg-white rounded-xl w-full h-full p-4">
       {/* TITLE */}
